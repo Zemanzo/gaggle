@@ -18,7 +18,7 @@ const StyledHeader = styled.header`
     min-width: 7ch;
   }
 
-  @media screen and ((max-width: 600px) or (max-height: 650px)) {
+  @media screen and (max-width: 600px), screen and (max-height: 650px) {
     flex-wrap: wrap;
   }
 `;
@@ -77,7 +77,7 @@ const CardsContainer = styled.section`
   grid-gap: 16px;
   justify-content: center;
 
-  @media screen and ((max-width: 600px) or (max-height: 650px)) {
+  @media screen and (max-width: 600px), screen and (max-height: 650px) {
     grid-gap: 4px;
   }
 `;

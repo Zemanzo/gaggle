@@ -55,7 +55,7 @@ const CardContainer = styled.div<{
     border-color: #eee;
   }
 
-  @media screen and ((max-width: 600px) or (max-height: 650px)) {
+  @media screen and (max-width: 600px), screen and (max-height: 650px) {
     max-width: 60px;
     min-height: 95px;
 
