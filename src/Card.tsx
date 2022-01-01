@@ -1,9 +1,20 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Rect from "./icons/Rect";
 import Diamond from "./icons/Diamond";
 import Tilde from "./icons/Tilde";
 import { CardAttributes, Shape } from "./types";
+
+const EntryFadeIn = keyframes`
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+`;
 
 const CardContainer = styled.div<{
   isSelected: boolean;
@@ -35,6 +46,10 @@ const CardContainer = styled.div<{
   border: 2px solid transparent;
   transition: border-color 0.2s;
   cursor: pointer;
+
+  animation: ${EntryFadeIn} 0.4s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
 
   :hover {
     border-color: #eee;
