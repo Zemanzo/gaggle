@@ -14,7 +14,8 @@ const StyledHeader = styled.header`
   justify-content: center;
 
   > button {
-    margin: 8px 16px;
+    margin: 4px 4px;
+    min-width: 7ch;
   }
 
   @media screen and ((max-width: 600px) or (max-height: 650px)) {
@@ -40,12 +41,32 @@ const Title = styled.div`
   }
 `;
 
-const IsValid = styled.div`
+const Message = styled.div`
+  padding: 0 8px;
   min-width: 25ch;
   font-size: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const RemainingCards = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  > button {
+    width: 100%;
+  }
+
+  > span {
+    font-size: 0.85em;
+    display: block;
+    padding: 2px 0;
+  }
+
+  margin-right: 8px;
 `;
 
 const CardsContainer = styled.section`
@@ -138,16 +159,16 @@ function App() {
   const [currentSelection, setCurrentSelection] = useState(
     [] as CardAttributes[]
   );
-  const [isValidSet, setIsValidSet] = useState("");
+  const [message, setMessage] = useState("");
 
   const addToSelection = (card: CardAttributes) => {
-    setIsValidSet("");
+    setMessage("");
     const selection = [...currentSelection, card];
     if (selection.length === 3) {
       const isValid = checkSelected(
         selection as [CardAttributes, CardAttributes, CardAttributes]
       );
-      setIsValidSet(isValid ? "Correct!!!" : "Incorrect :(");
+      setMessage(isValid ? "Correct!!!" : "Incorrect :(");
       if (isValid) {
         setHightlightedCards([]);
         if (visibleCards.length > INITIAL_CARDS) {
@@ -224,11 +245,12 @@ function App() {
   const showMore = () => {
     const combinations = checkCombinations();
     if (combinations.length === 0) {
+      setMessage("");
       const newCards = availableCards.slice(0, ADD_CARDS_AMOUNT);
       setAvailableCards(availableCards.slice(ADD_CARDS_AMOUNT));
       setVisibleCards([...visibleCards, ...newCards]);
     } else {
-      setIsValidSet("There's more to be found!");
+      setMessage("There's more to be found!");
     }
   };
 
@@ -238,6 +260,7 @@ function App() {
     setVisibleCards(newCards.slice(0, INITIAL_CARDS));
     setCurrentSelection([]);
     setHightlightedCards([]);
+    setMessage("");
   };
 
   const checkCombinations = () => {
@@ -260,10 +283,21 @@ function App() {
     return combinations;
   };
 
-  const getHelp = () => {
+  const highlightSingle = () => {
+    const combo = checkCombinations().pop()?.pop();
+    if (combo) {
+      setHightlightedCards([combo]);
+    } else {
+      setMessage("No valid combinations found");
+    }
+  };
+
+  const highlightAll = () => {
     const combo = checkCombinations().pop();
     if (combo) {
       setHightlightedCards(combo);
+    } else {
+      setMessage("No valid combinations found");
     }
   };
 
@@ -274,9 +308,13 @@ function App() {
           <h1>GAGGLE!</h1>
           <h2>/ˈɡaɡ(ə)l/ - noun</h2>
         </Title>
-        <IsValid>{isValidSet}</IsValid>
-        <button onClick={showMore}>Show more</button>
-        <button onClick={getHelp}>Stuck?</button>
+        <Message>{message}</Message>
+        <RemainingCards>
+          <button onClick={showMore}>Show more</button>
+          <span>Cards left: {availableCards.length}</span>
+        </RemainingCards>
+        <button onClick={highlightSingle}>Hint</button>
+        <button onClick={highlightAll}>Reveal</button>
         <button onClick={reset}>Reset</button>
       </StyledHeader>
       <SvgGlobals />
