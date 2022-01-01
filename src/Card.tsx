@@ -30,13 +30,24 @@ const CardContainer = styled.div<{
   height: 100%;
   box-sizing: border-box;
   padding: 8px;
-  height: 250px;
+  min-height: 170px;
+  height: 25vh;
   border: 2px solid transparent;
   transition: border-color 0.2s;
   cursor: pointer;
 
   :hover {
     border-color: #eee;
+  }
+
+  @media screen and ((max-width: 600px) or (max-height: 650px)) {
+    max-width: 60px;
+    min-height: 95px;
+
+    svg {
+      width: 75px;
+      height: 25px;
+    }
   }
 `;
 

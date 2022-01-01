@@ -16,6 +16,10 @@ const StyledHeader = styled.header`
   > button {
     margin: 8px 16px;
   }
+
+  @media screen and ((max-width: 600px) or (max-height: 650px)) {
+    flex-wrap: wrap;
+  }
 `;
 
 const Title = styled.div`
@@ -51,6 +55,10 @@ const CardsContainer = styled.section`
   grid-template-columns: repeat(6, auto);
   grid-gap: 16px;
   justify-content: center;
+
+  @media screen and ((max-width: 600px) or (max-height: 650px)) {
+    grid-gap: 4px;
+  }
 `;
 
 /**
