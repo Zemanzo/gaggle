@@ -286,6 +286,7 @@ function App() {
   const highlightSingle = () => {
     const combo = checkCombinations().pop()?.pop();
     if (combo) {
+      setCurrentSelection([]);
       setHightlightedCards([combo]);
     } else {
       setMessage("No valid combinations found");
@@ -295,6 +296,7 @@ function App() {
   const highlightAll = () => {
     const combo = checkCombinations().pop();
     if (combo) {
+      setCurrentSelection([]);
       setHightlightedCards(combo);
     } else {
       setMessage("No valid combinations found");

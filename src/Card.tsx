@@ -24,13 +24,16 @@ const CardContainer = styled.div<{
     isSelected
       ? css`
           background: #444;
+          border-color: #eee;
         `
       : shouldHighlight
       ? css`
           background: #262;
+          border-color: transparent;
         `
       : css`
           background: #222;
+          border-color: transparent;
         `}
   max-width: 150px;
   display: flex;
@@ -43,8 +46,12 @@ const CardContainer = styled.div<{
   padding: 8px;
   min-height: 170px;
   height: 25vh;
-  border: 2px solid transparent;
-  transition: border-color 0.2s;
+  border-width: 2px;
+  border-style: solid;
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: transparent;
+  transition: border-color 0.2s, outline-color 0.1s;
   cursor: pointer;
 
   animation: ${EntryFadeIn} 0.4s;
@@ -53,7 +60,8 @@ const CardContainer = styled.div<{
 
   @media (hover: hover) {
     :hover {
-      border-color: #eee;
+      border-color: transparent;
+      outline-color: #eee;
     }
   }
 
