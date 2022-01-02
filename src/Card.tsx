@@ -51,8 +51,10 @@ const CardContainer = styled.div<{
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
 
-  :hover {
-    border-color: #eee;
+  @media (hover: hover) {
+    :hover {
+      border-color: #eee;
+    }
   }
 
   @media screen and (max-width: 600px), screen and (max-height: 650px) {
