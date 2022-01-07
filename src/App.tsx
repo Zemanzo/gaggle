@@ -1,5 +1,12 @@
-import { useMemo, useState } from "react";
-import styled from "styled-components";
+import {
+  EventHandler,
+  KeyboardEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import styled, { css } from "styled-components";
 import Card from "./Card";
 import SvgGlobals from "./SvgGlobals";
 import { CardAttributes, CardType, Color, FillStyle, Shape } from "./types";
@@ -69,13 +76,22 @@ const RemainingCards = styled.div`
   margin-right: 8px;
 `;
 
-const CardsContainer = styled.section`
+const CardsContainer = styled.div<{ isGameOver: boolean }>`
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: repeat(3, auto);
   grid-template-columns: repeat(6, auto);
   grid-gap: 16px;
   justify-content: center;
+  transition: filter 1s;
+
+  ${({ isGameOver }) =>
+    isGameOver
+      ? css`
+          filter: grayscale(70%) brightness(150%) blur(2px);
+          pointer-events: none;
+        `
+      : ""}
 
   @media screen and (max-width: 600px), screen and (max-height: 650px) {
     grid-gap: 4px;
@@ -105,7 +121,7 @@ function enumKeys<O extends Object, K extends keyof O = keyof O>(obj: O): K[] {
   return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
 }
 
-function getCombinations(): CardType[] {
+function generateAllCombinations(): CardType[] {
   const combinations = [];
   for (let Britta = 1; Britta < 4; Britta++) {
     for (const colorKey of enumKeys(Color)) {
@@ -148,7 +164,10 @@ function createIdFromCardAttributes(card: CardAttributes): string {
 }
 
 function App() {
-  const initialCards = useMemo(() => randomizeArray(getCombinations()), []);
+  const initialCards = useMemo(
+    () => randomizeArray(generateAllCombinations()),
+    []
+  );
   const [availableCards, setAvailableCards] = useState(
     initialCards.slice(INITIAL_CARDS)
   );
@@ -160,15 +179,20 @@ function App() {
     [] as CardAttributes[]
   );
   const [message, setMessage] = useState("");
+  const [isGameOver, setIsGameOver] = useState(false);
+  const availableCombinationsRef = useRef<CardType[][]>([]);
 
-  const addToSelection = (card: CardAttributes) => {
+  const addToSelection = (cards: CardAttributes | CardAttributes[]) => {
     setMessage("");
-    const selection = [...currentSelection, card];
+    const selection = Array.isArray(cards)
+      ? cards
+      : [...currentSelection, cards];
     if (selection.length === 3) {
       const isValid = checkSelected(
         selection as [CardAttributes, CardAttributes, CardAttributes]
       );
       setMessage(isValid ? "Correct!!!" : "Incorrect :(");
+      setCurrentSelection([]);
       if (isValid) {
         setHightlightedCards([]);
         if (visibleCards.length > INITIAL_CARDS) {
@@ -177,7 +201,6 @@ function App() {
           overwriteExisting(selection);
         }
       }
-      setCurrentSelection([]);
     } else {
       setCurrentSelection(selection);
     }
@@ -225,7 +248,10 @@ function App() {
       createIdFromCardAttributes(card)
     );
     const newCards = availableCards.slice(0, cardIdsToRemove.length);
-    setAvailableCards(availableCards.slice(cardIdsToRemove.length));
+    const remainingAvailableCards = availableCards.slice(
+      cardIdsToRemove.length
+    );
+    setAvailableCards(remainingAvailableCards);
     const updatedVisibleCards = visibleCards.reduce(
       (acc: CardType[], visible) => {
         if (cardIdsToRemove.includes(visible.id)) {
@@ -245,22 +271,28 @@ function App() {
   const showMore = () => {
     const combinations = checkCombinations();
     if (combinations.length === 0) {
-      setMessage("");
-      const newCards = availableCards.slice(0, ADD_CARDS_AMOUNT);
-      setAvailableCards(availableCards.slice(ADD_CARDS_AMOUNT));
-      setVisibleCards([...visibleCards, ...newCards]);
+      if (availableCards.length === 0) {
+        setMessage("No more cards left!");
+      } else {
+        setMessage("");
+        const newCards = availableCards.slice(0, ADD_CARDS_AMOUNT);
+        setAvailableCards(availableCards.slice(ADD_CARDS_AMOUNT));
+        setVisibleCards([...visibleCards, ...newCards]);
+      }
     } else {
       setMessage("There's more to be found!");
     }
   };
 
   const reset = () => {
-    const newCards = randomizeArray(getCombinations());
+    const newCards = randomizeArray(generateAllCombinations());
     setAvailableCards(newCards.slice(INITIAL_CARDS));
     setVisibleCards(newCards.slice(0, INITIAL_CARDS));
     setCurrentSelection([]);
     setHightlightedCards([]);
     setMessage("");
+    setIsGameOver(false);
+    availableCombinationsRef.current = [];
   };
 
   const checkCombinations = () => {
@@ -284,7 +316,7 @@ function App() {
   };
 
   const highlightSingle = () => {
-    const combo = checkCombinations().pop()?.pop();
+    const combo = availableCombinationsRef.current[0]?.[0];
     if (combo) {
       setCurrentSelection([]);
       setHightlightedCards([combo]);
@@ -294,7 +326,7 @@ function App() {
   };
 
   const highlightAll = () => {
-    const combo = checkCombinations().pop();
+    const combo = availableCombinationsRef.current[0];
     if (combo) {
       setCurrentSelection([]);
       setHightlightedCards(combo);
@@ -302,6 +334,40 @@ function App() {
       setMessage("No valid combinations found");
     }
   };
+
+  useEffect(() => {
+    availableCombinationsRef.current = checkCombinations();
+    if (
+      availableCombinationsRef.current.length === 0 &&
+      availableCards.length === 0
+    ) {
+      setMessage("Game over");
+      setIsGameOver(true);
+    }
+  }, [availableCombinationsRef.current, visibleCards, availableCards.length]);
+
+  useEffect(() => {
+    const onKeyPress: EventHandler<any> = (ev: KeyboardEvent) => {
+      if (ev.key === "End") {
+        if (availableCombinationsRef.current.length > 0) {
+          const combo = availableCombinationsRef.current[0];
+          if (combo) {
+            const comboWithoutIds: CardAttributes[] = combo.map((card) => {
+              const { id, ...newCard } = card;
+              return newCard;
+            });
+            addToSelection(comboWithoutIds);
+          }
+        } else {
+          showMore();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKeyPress, false);
+    return () => {
+      document.removeEventListener("keydown", onKeyPress, false);
+    };
+  }, [availableCombinationsRef.current]);
 
   return (
     <>
@@ -320,7 +386,7 @@ function App() {
         <button onClick={reset}>Reset</button>
       </StyledHeader>
       <SvgGlobals />
-      <CardsContainer>
+      <CardsContainer isGameOver={isGameOver}>
         {visibleCards.map(({ id, ...cardAttributes }) => {
           const isSelected = currentSelection.some(
             (selection) => id === createIdFromCardAttributes(selection)
