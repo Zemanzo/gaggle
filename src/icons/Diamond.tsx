@@ -7,9 +7,10 @@ const StyledSvg = styled.svg`
   height: 50px;
 `;
 
-const Diamond: React.FC<{ color: Color; fillStyle: FillStyle }> = ({
+const Diamond: React.FC<{ color: string; fillStyle: FillStyle }> = ({
   color,
   fillStyle,
+  ...props
 }) => {
   let fill;
   switch (fillStyle) {
@@ -25,7 +26,7 @@ const Diamond: React.FC<{ color: Color; fillStyle: FillStyle }> = ({
       break;
   }
   return (
-    <StyledSvg viewBox="0 0 100 50">
+    <StyledSvg viewBox="0 0 100 50" {...props}>
       <polygon
         points="
         50, 5

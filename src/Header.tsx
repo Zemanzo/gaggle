@@ -6,6 +6,7 @@ import HamburgerMenu from "./icons/HamburgerMenu";
 import { usePageContext } from "./PageContext";
 import AboutModal from "./AboutModal";
 import ConfigModal from "./ConfigModal";
+import ExplanationModal from "./ExplanationModal";
 
 const EntryFadeIn = keyframes`
 	0% {
@@ -152,24 +153,34 @@ const Header: React.FC<{
   cardCount: number;
 }> = ({ message, setMessage, onMenuEvent, cardCount }) => {
   const [isDropDownMenuVisible, setIsDropDownMenuVisible] = useState(false);
-  const [isAboutModalVisible, setIsAboutModalVisible] = useState(false);
   const [isConfigModalVisible, setIsConfigModalVisible] = useState(false);
+  const [isExplanationModalVisible, setIsExplanationModalVisible] =
+    useState(false);
+  const [isAboutModalVisible, setIsAboutModalVisible] = useState(false);
   const pageContext = usePageContext();
 
   const toggleDropDownMenu = () => {
     setIsDropDownMenuVisible(!isDropDownMenuVisible);
   };
 
-  const toggleAbout = () => {
-    setIsAboutModalVisible(!isAboutModalVisible);
+  const toggleConfig = () => {
+    setIsConfigModalVisible(!isConfigModalVisible);
     setIsDropDownMenuVisible(false);
     pageContext.setIsShowingFullScreenModal(
       !pageContext.isShowingFullScreenModal
     );
   };
 
-  const toggleConfig = () => {
-    setIsConfigModalVisible(!isConfigModalVisible);
+  const toggleExplanation = () => {
+    setIsExplanationModalVisible(!isExplanationModalVisible);
+    setIsDropDownMenuVisible(false);
+    pageContext.setIsShowingFullScreenModal(
+      !pageContext.isShowingFullScreenModal
+    );
+  };
+
+  const toggleAbout = () => {
+    setIsAboutModalVisible(!isAboutModalVisible);
     setIsDropDownMenuVisible(false);
     pageContext.setIsShowingFullScreenModal(
       !pageContext.isShowingFullScreenModal
@@ -220,9 +231,11 @@ const Header: React.FC<{
           >
             New game
           </DropDownButton>
+
           {/* <DropDownButton delay={0.1} onClick={() => {}}>
             View statistics
           </DropDownButton> */}
+
           <DropDownButton delay={0.1} onClick={toggleConfig}>
             Configuration
           </DropDownButton>
@@ -232,7 +245,18 @@ const Header: React.FC<{
               <ConfigModal close={toggleConfig} />,
               pageContext.fullScreenModalRef.current
             )}
-          <DropDownButton delay={0.2} onClick={toggleAbout}>
+
+          <DropDownButton delay={0.2} onClick={toggleExplanation}>
+            How to play
+          </DropDownButton>
+          {pageContext.fullScreenModalRef.current &&
+            isExplanationModalVisible &&
+            ReactDOM.createPortal(
+              <ExplanationModal close={toggleExplanation} />,
+              pageContext.fullScreenModalRef.current
+            )}
+
+          <DropDownButton delay={0.3} onClick={toggleAbout}>
             About
           </DropDownButton>
           {pageContext.fullScreenModalRef.current &&

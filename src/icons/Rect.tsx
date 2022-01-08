@@ -7,9 +7,10 @@ const StyledSvg = styled.svg`
   height: 50px;
 `;
 
-const Rect: React.FC<{ color: Color; fillStyle: FillStyle }> = ({
+const Rect: React.FC<{ color: string; fillStyle: FillStyle }> = ({
   color,
   fillStyle,
+  ...props
 }) => {
   let fill;
   switch (fillStyle) {
@@ -25,7 +26,7 @@ const Rect: React.FC<{ color: Color; fillStyle: FillStyle }> = ({
       break;
   }
   return (
-    <StyledSvg viewBox="0 0 100 50">
+    <StyledSvg viewBox="0 0 100 50" {...props}>
       <rect
         x="10"
         y="5"

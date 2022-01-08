@@ -7,9 +7,10 @@ const StyledSvg = styled.svg`
   height: 50px;
 `;
 
-const Tilde: React.FC<{ color: Color; fillStyle: FillStyle }> = ({
+const Tilde: React.FC<{ color: string; fillStyle: FillStyle }> = ({
   color,
   fillStyle,
+  ...props
 }) => {
   let fill;
   switch (fillStyle) {
@@ -25,12 +26,12 @@ const Tilde: React.FC<{ color: Color; fillStyle: FillStyle }> = ({
       break;
   }
   return (
-    <StyledSvg viewBox="0 0 100 50">
+    <StyledSvg viewBox="0 0 100 50" {...props}>
       <path
         d="
           M 50,15
           Q 70,0 90,25
-          Q 70,50 50,35 
+          Q 70,50 50,35
           Q 30,50 10,25
           Q 30,0 50,15
           z

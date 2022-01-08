@@ -54,6 +54,7 @@ function App() {
         setConfigOption,
       }}
     >
+      <SvgGlobals />
       <FullScreenModal
         ref={fullScreenModalRef}
         visible={isShowingFullScreenModal}
@@ -64,7 +65,6 @@ function App() {
         onMenuEvent={onMenuEvent}
         cardCount={cardCount}
       />
-      <SvgGlobals />
       <PlayArea
         setMessage={setMessage}
         menuEvent={menuEvent}

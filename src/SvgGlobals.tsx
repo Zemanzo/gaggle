@@ -5,12 +5,15 @@ import { Color } from "./types";
 const StyledSvg = styled.svg`
   position: absolute;
   pointer-events: none;
+  top: -100%;
 `;
 
 const SvgGlobals: React.FC<{}> = ({}) => {
+  const colors: string[] = Object.values(Color);
+  colors.push("#ccc");
   return (
     <StyledSvg>
-      {Object.values(Color).map((color) => {
+      {colors.map((color) => {
         return (
           <pattern
             key={color}

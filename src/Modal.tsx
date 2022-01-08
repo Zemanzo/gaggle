@@ -31,12 +31,14 @@ const ModalContent = styled.div`
   min-width: 300px;
   min-height: 120px;
   max-width: 900px;
+  max-height: 100vh;
   border: 2px solid #eee;
   border-radius: 8px;
   padding: ${MODAL_PADDING}px;
   box-sizing: border-box;
   background: #060606;
   position: relative;
+  overflow-y: auto;
 `;
 
 const CloseButtonElement = styled.button`
@@ -70,9 +72,9 @@ export const Title = styled.div`
   margin-bottom: 1em;
 `;
 
-const Modal: React.FC<{}> = ({ children }) => {
+const Modal: React.FC<{}> = ({ children, ...props }) => {
   return (
-    <ModalContainer>
+    <ModalContainer {...props}>
       <ModalContent>{children}</ModalContent>
     </ModalContainer>
   );
