@@ -138,8 +138,8 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
       <Title>CONFIGURATION</Title>
       <CloseButton onClick={close} />
       <WarningExplanation>
-        Options that are marked with a <span>(!)</span> will restart the current
-        game if they are changed.
+        Options that are marked with a <span>(!)</span> will start a new game if
+        they are changed.
       </WarningExplanation>
       <div>
         <ConfigRow>
