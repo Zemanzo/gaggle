@@ -102,12 +102,14 @@ const ExplanationModal: React.FC<{ close: () => void }> = ({ close }) => {
       <p>
         To be able to match three cards, either of the following rules should
         apply for each individual attribute:
-        <ol>
-          <li>All attributes of this attribute type are equal to each other</li>
-          <li>
-            All attributes of this attribute type are different from each other
-          </li>
-        </ol>
+      </p>
+      <ol>
+        <li>All variants of this attribute are same</li>
+        <li>All variants of this attribute are different from each other</li>
+      </ol>
+      <p>
+        In other words: Each attribute needs to clear one of the rules, but all
+        four attributes need to clear a rule to count as a match.
       </p>
     </StyledModal>
   );
