@@ -22,3 +22,23 @@ code {
   background: #060606;
   color: #eee;
 }
+
+button {
+  background: #060606;
+  border: 2px solid #eee;
+  border-radius: 4px;
+  color: #eee;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #222;
+}
+
+a,
+a:visited {
+  color: #09f;
+}
+a:hover {
+  color: #3bf;
+}

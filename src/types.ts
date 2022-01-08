@@ -26,3 +26,10 @@ export interface CardAttributes {
 export interface CardType extends CardAttributes {
   id: string;
 }
+
+export enum MenuEvents {
+  SHOW_MORE,
+  HINT,
+  REVEAL,
+  RESET,
+}

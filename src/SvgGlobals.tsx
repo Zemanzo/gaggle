@@ -13,6 +13,7 @@ const SvgGlobals: React.FC<{}> = ({}) => {
       {Object.values(Color).map((color) => {
         return (
           <pattern
+            key={color}
             id={`diagonalHatch-${color}`}
             patternUnits="userSpaceOnUse"
             width="8"

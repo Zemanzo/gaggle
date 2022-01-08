@@ -3,7 +3,7 @@ import styled, { css, keyframes } from "styled-components";
 import Rect from "./icons/Rect";
 import Diamond from "./icons/Diamond";
 import Tilde from "./icons/Tilde";
-import { CardAttributes, Shape } from "./types";
+import { CardAttributes, Shape, Color } from "./types";
 
 const EntryFadeIn = keyframes`
 	from {
@@ -53,6 +53,7 @@ const CardContainer = styled.div<{
   outline-color: transparent;
   transition: border-color 0.2s, outline-color 0.1s;
   cursor: pointer;
+  position: relative;
 
   animation: ${EntryFadeIn} 0.4s;
   animation-timing-function: ease-out;
@@ -76,10 +77,35 @@ const CardContainer = styled.div<{
   }
 `;
 
-const IconLookup = {
+const ColorLetter = styled.div<{
+  color: Color;
+}>`
+  position: absolute;
+  font-style: sans-serif;
+  font-weight: bold;
+  font-size: 0.8em;
+  width: 100%;
+  bottom: 0px;
+  left: 4px;
+  opacity: 0.5;
+  user-select: none;
+
+  ${({ color }) =>
+    css`
+      color: ${color};
+    `};
+`;
+
+const iconLookup = {
   [Shape.OVAL]: Diamond,
   [Shape.RECT]: Rect,
   [Shape.TILDE]: Tilde,
+};
+
+const colorLookup = {
+  [Color.RED]: "R",
+  [Color.GREEN]: "G",
+  [Color.BLUE]: "B",
 };
 
 interface CardProps extends CardAttributes {
@@ -99,7 +125,7 @@ const Card: React.FC<CardProps> = ({
   isSelected,
   shouldHighlight,
 }) => {
-  const ShapeComponent = IconLookup[shape];
+  const ShapeComponent = iconLookup[shape];
   const Icons = new Array(amount).fill(
     <ShapeComponent color={color} fillStyle={fillStyle} />
   );
@@ -118,6 +144,7 @@ const Card: React.FC<CardProps> = ({
       onClick={onClick}
     >
       {Icons}
+      <ColorLetter color={color}>{colorLookup[color]}</ColorLetter>
     </CardContainer>
   );
 };
