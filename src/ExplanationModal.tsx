@@ -94,8 +94,8 @@ const ExplanationModal: React.FC<{ close: () => void }> = ({ close }) => {
       <AttributeParagraph>
         <AttributeParagraphTitle>Color</AttributeParagraphTitle>
         <div>
-          <Tilde color={Color.RED} fillStyle={FillStyle.EMPTY} />
-          <Tilde color={Color.GREEN} fillStyle={FillStyle.PARTIAL} />
+          <Tilde color={Color.RED} fillStyle={FillStyle.FULL} />
+          <Tilde color={Color.GREEN} fillStyle={FillStyle.FULL} />
           <Tilde color={Color.BLUE} fillStyle={FillStyle.FULL} />
         </div>
       </AttributeParagraph>
