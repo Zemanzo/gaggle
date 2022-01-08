@@ -30,6 +30,7 @@ const MODAL_PADDING = 16;
 const ModalContent = styled.div`
   min-width: 300px;
   min-height: 120px;
+  max-width: 900px;
   border: 2px solid #eee;
   border-radius: 8px;
   padding: ${MODAL_PADDING}px;
@@ -58,6 +59,17 @@ const CloseButtonElement = styled.button`
   }
 `;
 
+export const Title = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1em;
+`;
+
 const Modal: React.FC<{}> = ({ children }) => {
   return (
     <ModalContainer>
@@ -68,8 +80,6 @@ const Modal: React.FC<{}> = ({ children }) => {
 
 export default Modal;
 
-const CloseButton: React.FC<{ onClick: () => void }> = (props) => {
+export const CloseButton: React.FC<{ onClick: () => void }> = (props) => {
   return <CloseButtonElement {...props}>X</CloseButtonElement>;
 };
-
-export { CloseButton };

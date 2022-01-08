@@ -1,9 +1,12 @@
 import { createContext, useContext } from "react";
+import { ConfigurationOptions, SetConfigOption } from "./types";
 
 export interface PageContextType {
   isShowingFullScreenModal: boolean;
   setIsShowingFullScreenModal: React.Dispatch<React.SetStateAction<boolean>>;
   fullScreenModalRef: React.MutableRefObject<HTMLDivElement | null>;
+  config: ConfigurationOptions | undefined;
+  setConfigOption: SetConfigOption;
 }
 
 export const PageContext = createContext<PageContextType>(

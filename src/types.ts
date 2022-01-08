@@ -33,3 +33,13 @@ export enum MenuEvents {
   REVEAL,
   RESET,
 }
+
+export interface ConfigurationOptions {
+  colorLetters?: boolean;
+  minimumCards?: number;
+}
+
+export type SetConfigOption = <T extends keyof ConfigurationOptions>(
+  key: T,
+  newValue: ConfigurationOptions[T]
+) => void;

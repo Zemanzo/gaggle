@@ -4,8 +4,8 @@ import styled, { css, keyframes } from "styled-components";
 import { MenuEvents } from "./types";
 import HamburgerMenu from "./icons/HamburgerMenu";
 import { usePageContext } from "./PageContext";
-import { CloseButton } from "./Modal";
 import AboutModal from "./AboutModal";
+import ConfigModal from "./ConfigModal";
 
 const EntryFadeIn = keyframes`
 	0% {
@@ -152,6 +152,8 @@ const Header: React.FC<{
   cardCount: number;
 }> = ({ message, setMessage, onMenuEvent, cardCount }) => {
   const [isDropDownMenuVisible, setIsDropDownMenuVisible] = useState(false);
+  const [isAboutModalVisible, setIsAboutModalVisible] = useState(false);
+  const [isConfigModalVisible, setIsConfigModalVisible] = useState(false);
   const pageContext = usePageContext();
 
   const toggleDropDownMenu = () => {
@@ -159,6 +161,15 @@ const Header: React.FC<{
   };
 
   const toggleAbout = () => {
+    setIsAboutModalVisible(!isAboutModalVisible);
+    setIsDropDownMenuVisible(false);
+    pageContext.setIsShowingFullScreenModal(
+      !pageContext.isShowingFullScreenModal
+    );
+  };
+
+  const toggleConfig = () => {
+    setIsConfigModalVisible(!isConfigModalVisible);
     setIsDropDownMenuVisible(false);
     pageContext.setIsShowingFullScreenModal(
       !pageContext.isShowingFullScreenModal
@@ -203,6 +214,7 @@ const Header: React.FC<{
         <DropDownMenu isVisible={isDropDownMenuVisible}>
           <DropDownButton
             onClick={() => {
+              setIsDropDownMenuVisible(false);
               onMenuEvent(MenuEvents.RESET);
             }}
           >
@@ -211,13 +223,20 @@ const Header: React.FC<{
           {/* <DropDownButton delay={0.1} onClick={() => {}}>
             View statistics
           </DropDownButton> */}
-          {/* <DropDownButton delay={0.1} onClick={() => {}}>
+          <DropDownButton delay={0.1} onClick={toggleConfig}>
             Configuration
-          </DropDownButton> */}
-          <DropDownButton delay={0.1} onClick={toggleAbout}>
+          </DropDownButton>
+          {pageContext.fullScreenModalRef.current &&
+            isConfigModalVisible &&
+            ReactDOM.createPortal(
+              <ConfigModal close={toggleConfig} />,
+              pageContext.fullScreenModalRef.current
+            )}
+          <DropDownButton delay={0.2} onClick={toggleAbout}>
             About
           </DropDownButton>
           {pageContext.fullScreenModalRef.current &&
+            isAboutModalVisible &&
             ReactDOM.createPortal(
               <AboutModal close={toggleAbout} />,
               pageContext.fullScreenModalRef.current

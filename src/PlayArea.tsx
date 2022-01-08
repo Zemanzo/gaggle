@@ -8,6 +8,7 @@ import {
 } from "react";
 import styled, { css } from "styled-components";
 import Card from "./Card";
+import { usePageContext } from "./PageContext";
 import {
   CardAttributes,
   CardType,
@@ -17,7 +18,6 @@ import {
   Shape,
 } from "./types";
 
-const INITIAL_CARDS = 12;
 const ADD_CARDS_AMOUNT = 3;
 
 const CardsContainer = styled.div<{ isGameOver: boolean }>`
@@ -113,15 +113,17 @@ const PlayArea: React.FC<{
   setMenuEvent: (newMenuEvent: MenuEvents | null) => void;
   setCardCount: (cardCount: number) => void;
 }> = ({ setMessage, menuEvent, setMenuEvent, setCardCount }) => {
+  const { config } = usePageContext();
+  const minimumCards = config?.minimumCards || 12;
   const initialCards = useMemo(
     () => randomizeArray(generateAllCombinations()),
     []
   );
   const [availableCards, setAvailableCards] = useState(
-    initialCards.slice(INITIAL_CARDS)
+    initialCards.slice(minimumCards)
   );
   const [visibleCards, setVisibleCards] = useState<CardType[]>(
-    initialCards.slice(0, INITIAL_CARDS)
+    initialCards.slice(0, minimumCards)
   );
   const [highlightedCards, setHightlightedCards] = useState<CardType[]>([]);
   const [currentSelection, setCurrentSelection] = useState(
@@ -143,7 +145,7 @@ const PlayArea: React.FC<{
       setCurrentSelection([]);
       if (isValid) {
         setHightlightedCards([]);
-        if (visibleCards.length > INITIAL_CARDS) {
+        if (visibleCards.length > minimumCards) {
           removeFromVisible(selection);
         } else {
           overwriteExisting(selection);
@@ -234,8 +236,8 @@ const PlayArea: React.FC<{
 
   const reset = () => {
     const newCards = randomizeArray(generateAllCombinations());
-    setAvailableCards(newCards.slice(INITIAL_CARDS));
-    setVisibleCards(newCards.slice(0, INITIAL_CARDS));
+    setAvailableCards(newCards.slice(minimumCards));
+    setVisibleCards(newCards.slice(0, minimumCards));
     setCurrentSelection([]);
     setHightlightedCards([]);
     setMessage("");
@@ -340,6 +342,10 @@ const PlayArea: React.FC<{
   useEffect(() => {
     setCardCount(availableCards.length);
   }, [setCardCount, availableCards.length]);
+
+  useEffect(() => {
+    reset();
+  }, [config?.minimumCards]);
 
   return (
     <CardsContainer isGameOver={isGameOver}>

@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
 import styled, { css } from "styled-components";
+import { useLocalStorage } from "react-use";
+import { PageContext } from "./PageContext";
 import Header from "./Header";
 import PlayArea from "./PlayArea";
 import SvgGlobals from "./SvgGlobals";
-import { MenuEvents } from "./types";
-import { PageContext } from "./PageContext";
+import { ConfigurationOptions, MenuEvents, SetConfigOption } from "./types";
+import { defaultConfiguration } from "./ConfigModal";
 
 const FullScreenModal = styled.div<{ visible: boolean }>`
   position: absolute;
@@ -27,6 +29,16 @@ function App() {
   const fullScreenModalRef = useRef<HTMLDivElement>(null);
   const [isShowingFullScreenModal, setIsShowingFullScreenModal] =
     useState(false);
+  const [config, setConfig] = useLocalStorage<ConfigurationOptions>(
+    "config",
+    defaultConfiguration
+  );
+  const setConfigOption: SetConfigOption = (key, newValue) => {
+    setConfig({
+      ...config,
+      [key]: newValue,
+    });
+  };
 
   const onMenuEvent = (menuEvent: MenuEvents) => {
     setMenuEvent(menuEvent);
@@ -38,6 +50,8 @@ function App() {
         isShowingFullScreenModal,
         setIsShowingFullScreenModal,
         fullScreenModalRef,
+        config,
+        setConfigOption,
       }}
     >
       <FullScreenModal

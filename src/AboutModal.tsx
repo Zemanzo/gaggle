@@ -1,17 +1,5 @@
-import react from "react";
-import styled from "styled-components";
-import Modal, { CloseButton } from "./Modal";
-
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  text-align: left;
-
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 1em;
-`;
+import React from "react";
+import Modal, { CloseButton, Title } from "./Modal";
 
 const AboutModal: React.FC<{ close: () => void }> = ({ close }) => {
   return (

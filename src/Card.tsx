@@ -4,6 +4,7 @@ import Rect from "./icons/Rect";
 import Diamond from "./icons/Diamond";
 import Tilde from "./icons/Tilde";
 import { CardAttributes, Shape, Color } from "./types";
+import { usePageContext } from "./PageContext";
 
 const EntryFadeIn = keyframes`
 	from {
@@ -125,6 +126,8 @@ const Card: React.FC<CardProps> = ({
   isSelected,
   shouldHighlight,
 }) => {
+  const { config } = usePageContext();
+
   const ShapeComponent = iconLookup[shape];
   const Icons = new Array(amount).fill(
     <ShapeComponent color={color} fillStyle={fillStyle} />
@@ -144,7 +147,9 @@ const Card: React.FC<CardProps> = ({
       onClick={onClick}
     >
       {Icons}
-      <ColorLetter color={color}>{colorLookup[color]}</ColorLetter>
+      {config?.colorLetters && (
+        <ColorLetter color={color}>{colorLookup[color]}</ColorLetter>
+      )}
     </CardContainer>
   );
 };
