@@ -35,9 +35,10 @@ export enum MenuEvents {
 }
 
 export interface ConfigurationOptions {
+  minimumCards?: number;
+  autoShowMore?: boolean;
   colorLetters?: boolean;
   colorLettersPosition?: boolean;
-  minimumCards?: number;
 }
 
 export type SetConfigOption = <T extends keyof ConfigurationOptions>(

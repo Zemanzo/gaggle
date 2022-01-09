@@ -287,12 +287,13 @@ const PlayArea: React.FC<{
 
   useEffect(() => {
     availableCombinationsRef.current = checkCombinations();
-    if (
-      availableCombinationsRef.current.length === 0 &&
-      availableCards.length === 0
-    ) {
+    if (availableCombinationsRef.current.length === 0) {
+      if (availableCards.length === 0) {
       setMessage("Game over");
       setIsGameOver(true);
+      } else if (config?.autoShowMore) {
+        showMore();
+      }
     }
   }, [availableCombinationsRef.current, visibleCards, availableCards.length]);
 

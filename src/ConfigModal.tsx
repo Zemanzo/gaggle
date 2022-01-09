@@ -1,18 +1,27 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Modal, { CloseButton, Title } from "./Modal";
 import { usePageContext } from "./PageContext";
 
 export const defaultConfiguration = {
-  colorLetters: true,
   minimumCards: 12,
+  autoShowMore: false,
+  colorLetters: true,
   colorLettersPosition: false,
 };
 
-const ConfigRow = styled.div`
+const ConfigRow = styled.div<{ disabled?: boolean }>`
   display: flex;
   align-items: center;
   margin-bottom: 4px;
+
+  ${({ disabled = false }) =>
+    disabled
+      ? css`
+          filter: grayscale(100%) brightness(50%);
+          pointer-events: none;
+        `
+      : ""}
 `;
 
 const ConfigLabel = styled.div`
@@ -95,7 +104,6 @@ const WarningExplanation = styled.p`
   font-style: italic;
   color: #aaa;
   font-size: 0.9em;
-  max-width: 50ch;
 
   span {
     font-style: normal;
@@ -116,6 +124,18 @@ const WarningSymbol = styled.sup`
 const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
   const { config, setConfigOption } = usePageContext();
 
+  const onMinimumCardsChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const value = parseInt((event.target as HTMLInputElement).value);
+
+    setConfigOption("minimumCards", value);
+  };
+
+  const onAutoShowMoreChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    setConfigOption("autoShowMore", isChecked);
+  };
+
   const onColorLettersChange = (event: React.FormEvent<HTMLInputElement>) => {
     const isChecked = (event.target as HTMLInputElement).checked;
 
@@ -129,13 +149,6 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
 
     setConfigOption("colorLettersPosition", isChecked);
   };
-
-  const onMinimumCardsChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const value = parseInt((event.target as HTMLInputElement).value);
-
-    setConfigOption("minimumCards", value);
-  };
-
   const warningSymbol = (
     <WarningSymbol title="Changing this value will start a new game!">
       (!)
@@ -151,40 +164,6 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
         they are changed.
       </WarningExplanation>
       <div>
-        <ConfigRow>
-          <ConfigLabel>
-            Add letters to better distinguish different colors
-          </ConfigLabel>
-          <ConfigInputContainer>
-            <HiddenCheckboxInput
-              type="checkbox"
-              id="colorLetters"
-              checked={config?.colorLetters}
-              onChange={onColorLettersChange}
-            />
-            <CheckboxButtonLabel htmlFor="colorLetters">
-              {config?.colorLetters ? "✔" : "✘"}
-            </CheckboxButtonLabel>
-          </ConfigInputContainer>
-        </ConfigRow>
-
-        {config?.colorLetters && (
-          <ConfigRow>
-            <ConfigLabel>Use different position for letters</ConfigLabel>
-            <ConfigInputContainer>
-              <HiddenCheckboxInput
-                type="checkbox"
-                id="colorLettersPosition"
-                checked={config?.colorLettersPosition}
-                onChange={onColorLetterPositionChange}
-              />
-              <CheckboxButtonLabel htmlFor="colorLettersPosition">
-                {config?.colorLettersPosition ? "✔" : "✘"}
-              </CheckboxButtonLabel>
-            </ConfigInputContainer>
-          </ConfigRow>
-        )}
-
         <ConfigRow>
           <ConfigLabel>
             Minimum amount of cards visible{warningSymbol}
@@ -222,6 +201,56 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
               checked={config?.minimumCards === 18}
             />
             <RadioButtonLabel htmlFor="minimumCards-18">18</RadioButtonLabel>
+          </ConfigInputContainer>
+        </ConfigRow>
+
+        <ConfigRow>
+          <ConfigLabel>
+            Automatically show more cards when there are no valid combinations
+            available
+          </ConfigLabel>
+          <ConfigInputContainer>
+            <HiddenCheckboxInput
+              type="checkbox"
+              id="autoShowMore"
+              checked={config?.autoShowMore}
+              onChange={onAutoShowMoreChange}
+            />
+            <CheckboxButtonLabel htmlFor="autoShowMore">
+              {config?.autoShowMore ? "✔" : "✘"}
+            </CheckboxButtonLabel>
+          </ConfigInputContainer>
+        </ConfigRow>
+
+        <ConfigRow>
+          <ConfigLabel>
+            Add letters to better distinguish different colors
+          </ConfigLabel>
+          <ConfigInputContainer>
+            <HiddenCheckboxInput
+              type="checkbox"
+              id="colorLetters"
+              checked={config?.colorLetters}
+              onChange={onColorLettersChange}
+            />
+            <CheckboxButtonLabel htmlFor="colorLetters">
+              {config?.colorLetters ? "✔" : "✘"}
+            </CheckboxButtonLabel>
+          </ConfigInputContainer>
+        </ConfigRow>
+
+        <ConfigRow disabled={!Boolean(config?.colorLetters)}>
+          <ConfigLabel>Use different position for letters</ConfigLabel>
+          <ConfigInputContainer>
+            <HiddenCheckboxInput
+              type="checkbox"
+              id="colorLettersPosition"
+              checked={config?.colorLettersPosition}
+              onChange={onColorLetterPositionChange}
+            />
+            <CheckboxButtonLabel htmlFor="colorLettersPosition">
+              {config?.colorLettersPosition ? "✔" : "✘"}
+            </CheckboxButtonLabel>
           </ConfigInputContainer>
         </ConfigRow>
       </div>
