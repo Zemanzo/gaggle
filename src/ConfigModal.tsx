@@ -6,6 +6,7 @@ import { usePageContext } from "./PageContext";
 export const defaultConfiguration = {
   colorLetters: true,
   minimumCards: 12,
+  colorLettersPosition: false,
 };
 
 const ConfigRow = styled.div`
@@ -121,6 +122,14 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
     setConfigOption("colorLetters", isChecked);
   };
 
+  const onColorLetterPositionChange = (
+    event: React.FormEvent<HTMLInputElement>
+  ) => {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    setConfigOption("colorLettersPosition", isChecked);
+  };
+
   const onMinimumCardsChange = (event: React.FormEvent<HTMLInputElement>) => {
     const value = parseInt((event.target as HTMLInputElement).value);
 
@@ -158,6 +167,23 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
             </CheckboxButtonLabel>
           </ConfigInputContainer>
         </ConfigRow>
+
+        {config?.colorLetters && (
+          <ConfigRow>
+            <ConfigLabel>Use different position for letters</ConfigLabel>
+            <ConfigInputContainer>
+              <HiddenCheckboxInput
+                type="checkbox"
+                id="colorLettersPosition"
+                checked={config?.colorLettersPosition}
+                onChange={onColorLetterPositionChange}
+              />
+              <CheckboxButtonLabel htmlFor="colorLettersPosition">
+                {config?.colorLettersPosition ? "✔" : "✘"}
+              </CheckboxButtonLabel>
+            </ConfigInputContainer>
+          </ConfigRow>
+        )}
 
         <ConfigRow>
           <ConfigLabel>

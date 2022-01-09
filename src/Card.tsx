@@ -20,22 +20,8 @@ const EntryFadeIn = keyframes`
 const CardContainer = styled.div<{
   isSelected: boolean;
   shouldHighlight: boolean;
+  showLetters: boolean;
 }>`
-  ${({ isSelected, shouldHighlight }) =>
-    isSelected
-      ? css`
-          background: #444;
-          border-color: #eee;
-        `
-      : shouldHighlight
-      ? css`
-          background: #262;
-          border-color: transparent;
-        `
-      : css`
-          background: #222;
-          border-color: transparent;
-        `}
   max-width: 150px;
   display: flex;
   flex-direction: column;
@@ -60,6 +46,23 @@ const CardContainer = styled.div<{
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
 
+  ${({ isSelected, shouldHighlight }) =>
+    isSelected
+      ? css`
+          background: #444;
+          border-color: #eee;
+        `
+      : shouldHighlight
+      ? css`
+          background: #333;
+          border-color: #555;
+          border-style: dashed;
+        `
+      : css`
+          background: #222;
+          border-color: transparent;
+        `}
+
   @media (hover: hover) {
     :hover {
       border-color: transparent;
@@ -76,25 +79,66 @@ const CardContainer = styled.div<{
       height: 25px;
     }
   }
+
+  ${({ showLetters }) =>
+    showLetters
+      ? css`
+          padding-bottom: 16px;
+          min-height: 180px;
+
+          @media screen and (max-width: 600px), screen and (max-height: 650px) {
+            min-height: 105px;
+          }
+        `
+      : ""}
 `;
 
 const ColorLetter = styled.div<{
   color: Color;
+  differentLetterPositions: boolean;
 }>`
   position: absolute;
   font-style: sans-serif;
   font-weight: bold;
-  font-size: 0.8em;
+  font-size: 0.85em;
   width: 100%;
   bottom: 0px;
-  left: 4px;
   opacity: 0.5;
   user-select: none;
 
-  ${({ color }) =>
-    css`
+  ${({ color, differentLetterPositions }) => {
+    let position;
+    if (differentLetterPositions) {
+      switch (color) {
+        case Color.RED:
+        default:
+          position = css`
+            left: 4px;
+          `;
+          break;
+        case Color.GREEN:
+          position = css`
+            text-align: center;
+          `;
+          break;
+        case Color.BLUE:
+          position = css`
+            right: 4px;
+            text-align: right;
+          `;
+          break;
+      }
+    } else {
+      position = css`
+        left: 4px;
+      `;
+    }
+
+    return css`
       color: ${color};
-    `};
+      ${position}
+    `;
+  }}
 `;
 
 const iconLookup = {
@@ -144,11 +188,17 @@ const Card: React.FC<CardProps> = ({
     <CardContainer
       isSelected={isSelected}
       shouldHighlight={shouldHighlight}
+      showLetters={Boolean(config?.colorLetters)}
       onClick={onClick}
     >
       {Icons}
       {config?.colorLetters && (
-        <ColorLetter color={color}>{colorLookup[color]}</ColorLetter>
+        <ColorLetter
+          color={color}
+          differentLetterPositions={Boolean(config?.colorLettersPosition)}
+        >
+          {colorLookup[color]}
+        </ColorLetter>
       )}
     </CardContainer>
   );

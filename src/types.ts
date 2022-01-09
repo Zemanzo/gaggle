@@ -36,6 +36,7 @@ export enum MenuEvents {
 
 export interface ConfigurationOptions {
   colorLetters?: boolean;
+  colorLettersPosition?: boolean;
   minimumCards?: number;
 }
 
