@@ -111,6 +111,11 @@ const ExplanationModal: React.FC<{ close: () => void }> = ({ close }) => {
         In other words: Each attribute needs to clear one of the rules, but all
         four attributes need to clear a rule to count as a match.
       </p>
+      <p>
+        If it still is not clear, you may also approach it from another angle:
+        When you have two (but not three) of the same attribute, it is not a
+        valid match.
+      </p>
     </StyledModal>
   );
 };

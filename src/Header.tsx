@@ -200,7 +200,7 @@ const Header: React.FC<{
             onMenuEvent(MenuEvents.SHOW_MORE);
           }}
         >
-          Show more
+          More cards
         </button>
         <span>Cards left: {cardCount}</span>
       </RemainingCards>

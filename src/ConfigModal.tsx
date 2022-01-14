@@ -208,7 +208,7 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
 
         <ConfigRow>
           <ConfigLabel>
-            Automatically show more cards when there are no valid combinations
+            Automatically add more cards when there are no valid combinations
             available
           </ConfigLabel>
           <ConfigInputContainer>
