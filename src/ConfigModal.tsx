@@ -2,6 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import Modal, { CloseButton, Title } from "./Modal";
 import { usePageContext } from "./PageContext";
+import ConfigSubtitle from "./ConfigSubtitle";
 
 export const defaultConfiguration = {
   minimumCards: 12,
@@ -164,6 +165,7 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
         they are changed.
       </WarningExplanation>
       <div>
+        <ConfigSubtitle>Gameplay</ConfigSubtitle>
         <ConfigRow>
           <ConfigLabel>
             Minimum amount of cards visible{warningSymbol}
@@ -222,6 +224,7 @@ const ConfigModal: React.FC<{ close: () => void }> = ({ close }) => {
           </ConfigInputContainer>
         </ConfigRow>
 
+        <ConfigSubtitle>Accessibility</ConfigSubtitle>
         <ConfigRow>
           <ConfigLabel>
             Add letters to better distinguish different colors
