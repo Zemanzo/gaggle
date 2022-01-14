@@ -100,11 +100,11 @@ const ColorLetter = styled.div<{
   position: absolute;
   font-style: sans-serif;
   font-weight: bold;
-  font-size: 0.85em;
+  font-size: 1rem;
   width: 100%;
   bottom: 0px;
-  opacity: 0.5;
   user-select: none;
+  color: #bbb;
 
   ${({ color, differentLetterPositions }) => {
     let position;
@@ -135,7 +135,7 @@ const ColorLetter = styled.div<{
     }
 
     return css`
-      color: ${color};
+      /* color: ${color}; */
       ${position}
     `;
   }}
