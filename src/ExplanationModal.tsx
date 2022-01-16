@@ -4,6 +4,7 @@ import { default as LargeRect } from "./icons/Rect";
 import { default as LargeDiamond } from "./icons/Diamond";
 import { default as LargeTilde } from "./icons/Tilde";
 import Modal, { CloseButton, Title } from "./Modal";
+import ConfigSubtitle from "./ConfigSubtitle";
 import { Color, FillStyle } from "./types";
 
 const StyledModal = styled(Modal)`
@@ -11,13 +12,18 @@ const StyledModal = styled(Modal)`
     max-width: 70ch;
   }
 `;
+const AttributeParagraphs = styled.div`
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+`;
 
 const AttributeParagraph = styled.div`
   text-align: center;
-  margin: 8px 0;
   background: #111;
   padding: 8px;
   border-radius: 8px;
+  min-width: 150px;
 `;
 const AttributeParagraphTitle = styled.h3`
   text-transform: uppercase;
@@ -55,50 +61,54 @@ const ExplanationModal: React.FC<{ close: () => void }> = ({ close }) => {
       <CloseButton onClick={close} />
       <p>
         The goal of this game is to match three cards. However, matching is
-        limited based on the card's attributes. A card has FOUR attributes,
-        represented by the icons on the card:
+        limited based on the card's attributes.
       </p>
-      <AttributeParagraph>
-        <AttributeParagraphTitle>Shape</AttributeParagraphTitle>
-        <div>
-          <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
-          <Rect color="#ccc" fillStyle={FillStyle.FULL} />
-          <Tilde color="#ccc" fillStyle={FillStyle.FULL} />
-        </div>
-      </AttributeParagraph>
-      <AttributeParagraph>
-        <AttributeParagraphTitle>Amount</AttributeParagraphTitle>
-        <AttributesSideBySide>
+      <ConfigSubtitle>Attributes</ConfigSubtitle>
+      <p>A card has FOUR attributes, represented by the icons on the card:</p>
+      <AttributeParagraphs>
+        <AttributeParagraph>
+          <AttributeParagraphTitle>Shape</AttributeParagraphTitle>
           <div>
             <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+            <Rect color="#ccc" fillStyle={FillStyle.FULL} />
+            <Tilde color="#ccc" fillStyle={FillStyle.FULL} />
           </div>
+        </AttributeParagraph>
+        <AttributeParagraph>
+          <AttributeParagraphTitle>Amount</AttributeParagraphTitle>
+          <AttributesSideBySide>
+            <div>
+              <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+            </div>
+            <div>
+              <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+              <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+            </div>
+            <div>
+              <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+              <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+              <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+            </div>
+          </AttributesSideBySide>
+        </AttributeParagraph>
+        <AttributeParagraph>
+          <AttributeParagraphTitle>Fill style</AttributeParagraphTitle>
           <div>
-            <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
-            <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+            <Rect color="#ccc" fillStyle={FillStyle.EMPTY} />
+            <Rect color="#ccc" fillStyle={FillStyle.PARTIAL} />
+            <Rect color="#ccc" fillStyle={FillStyle.FULL} />
           </div>
+        </AttributeParagraph>
+        <AttributeParagraph>
+          <AttributeParagraphTitle>Color</AttributeParagraphTitle>
           <div>
-            <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
-            <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
-            <Diamond color="#ccc" fillStyle={FillStyle.FULL} />
+            <Tilde color={Color.RED} fillStyle={FillStyle.FULL} />
+            <Tilde color={Color.GREEN} fillStyle={FillStyle.FULL} />
+            <Tilde color={Color.BLUE} fillStyle={FillStyle.FULL} />
           </div>
-        </AttributesSideBySide>
-      </AttributeParagraph>
-      <AttributeParagraph>
-        <AttributeParagraphTitle>Fill style</AttributeParagraphTitle>
-        <div>
-          <Rect color="#ccc" fillStyle={FillStyle.EMPTY} />
-          <Rect color="#ccc" fillStyle={FillStyle.PARTIAL} />
-          <Rect color="#ccc" fillStyle={FillStyle.FULL} />
-        </div>
-      </AttributeParagraph>
-      <AttributeParagraph>
-        <AttributeParagraphTitle>Color</AttributeParagraphTitle>
-        <div>
-          <Tilde color={Color.RED} fillStyle={FillStyle.FULL} />
-          <Tilde color={Color.GREEN} fillStyle={FillStyle.FULL} />
-          <Tilde color={Color.BLUE} fillStyle={FillStyle.FULL} />
-        </div>
-      </AttributeParagraph>
+        </AttributeParagraph>
+      </AttributeParagraphs>
+      <ConfigSubtitle>Matching</ConfigSubtitle>
       <p>
         To be able to match three cards, either of the following rules should
         apply for each individual attribute:
@@ -115,6 +125,12 @@ const ExplanationModal: React.FC<{ close: () => void }> = ({ close }) => {
         If it still is not clear, you may also approach it from another angle:
         When you have two (but not three) of the same attribute, it is not a
         valid match.
+      </p>
+      <ConfigSubtitle>Cards</ConfigSubtitle>
+      <p>
+        It is possible that no valid matches are available in the set of cards
+        on your screen. In this case, you can add more cards by pressing the
+        "More cards" button. If there are no cards left, the game is over.
       </p>
     </StyledModal>
   );
