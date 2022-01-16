@@ -154,8 +154,8 @@ const colorLookup = {
 };
 
 interface CardProps extends CardAttributes {
-  addToSelection: (card: CardAttributes) => void;
-  removeFromSelection: (card: CardAttributes) => void;
+  addToSelection?: (card: CardAttributes) => void;
+  removeFromSelection?: (card: CardAttributes) => void;
   isSelected: boolean;
   shouldHighlight: boolean;
 }
@@ -169,6 +169,7 @@ const Card: React.FC<CardProps> = ({
   removeFromSelection,
   isSelected,
   shouldHighlight,
+  ...props
 }) => {
   const { config } = usePageContext();
 
@@ -177,11 +178,13 @@ const Card: React.FC<CardProps> = ({
     <ShapeComponent color={color} fillStyle={fillStyle} />
   );
   const onClick = () => {
-    const thisCard = { shape, color, fillStyle, amount };
-    if (isSelected) {
-      removeFromSelection(thisCard);
-    } else {
-      addToSelection(thisCard);
+    if (addToSelection && removeFromSelection) {
+      const thisCard = { shape, color, fillStyle, amount };
+      if (isSelected) {
+        removeFromSelection(thisCard);
+      } else {
+        addToSelection(thisCard);
+      }
     }
   };
   return (
@@ -190,6 +193,7 @@ const Card: React.FC<CardProps> = ({
       shouldHighlight={shouldHighlight}
       showLetters={Boolean(config?.colorLetters)}
       onClick={onClick}
+      {...props}
     >
       {Icons}
       {config?.colorLetters && (

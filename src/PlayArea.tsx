@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import styled, { css } from "styled-components";
+import PlayHistory from "./PlayHistory";
 import Card from "./Card";
 import { usePageContext } from "./PageContext";
 import {
@@ -17,10 +18,16 @@ import {
   MenuEvents,
   Shape,
 } from "./types";
+import { createIdFromCardAttributes } from "./utils";
 
 const ADD_CARDS_AMOUNT = 3;
 
+const Container = styled.div`
+  display: flex;
+`;
+
 const CardsContainer = styled.div<{ isGameOver: boolean }>`
+  flex: 1;
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: repeat(3, auto);
@@ -103,10 +110,6 @@ function checkSelected(
   return true;
 }
 
-function createIdFromCardAttributes(card: CardAttributes): string {
-  return `${card.amount}-${card.color}-${card.fillStyle}-${card.shape}`;
-}
-
 const PlayArea: React.FC<{
   setMessage: (newMessage: string) => void;
   menuEvent: MenuEvents | null;
@@ -129,6 +132,7 @@ const PlayArea: React.FC<{
   const [currentSelection, setCurrentSelection] = useState(
     [] as CardAttributes[]
   );
+  const [lastPlayed, setLastPlayed] = useState([] as CardAttributes[]);
   const [isGameOver, setIsGameOver] = useState(false);
   const availableCombinationsRef = useRef<CardType[][]>([]);
 
@@ -150,6 +154,7 @@ const PlayArea: React.FC<{
         } else {
           overwriteExisting(selection);
         }
+        setLastPlayed(selection);
       }
     } else {
       setCurrentSelection(selection);
@@ -289,8 +294,8 @@ const PlayArea: React.FC<{
     availableCombinationsRef.current = checkCombinations();
     if (availableCombinationsRef.current.length === 0) {
       if (availableCards.length === 0) {
-      setMessage("Game over");
-      setIsGameOver(true);
+        setMessage("Game over");
+        setIsGameOver(true);
       } else if (config?.autoShowMore) {
         showMore();
       }
@@ -349,26 +354,29 @@ const PlayArea: React.FC<{
   }, [config?.minimumCards]);
 
   return (
-    <CardsContainer isGameOver={isGameOver}>
-      {visibleCards.map(({ id, ...cardAttributes }) => {
-        const isSelected = currentSelection.some(
-          (selection) => id === createIdFromCardAttributes(selection)
-        );
-        const shouldHighlight = highlightedCards.some(
-          (selection) => id === createIdFromCardAttributes(selection)
-        );
-        return (
-          <Card
-            {...cardAttributes}
-            addToSelection={addToSelection}
-            removeFromSelection={removeFromSelection}
-            isSelected={isSelected}
-            shouldHighlight={shouldHighlight}
-            key={id}
-          />
-        );
-      })}
-    </CardsContainer>
+    <Container>
+      <CardsContainer isGameOver={isGameOver}>
+        {visibleCards.map(({ id, ...cardAttributes }) => {
+          const isSelected = currentSelection.some(
+            (selection) => id === createIdFromCardAttributes(selection)
+          );
+          const shouldHighlight = highlightedCards.some(
+            (selection) => id === createIdFromCardAttributes(selection)
+          );
+          return (
+            <Card
+              {...cardAttributes}
+              addToSelection={addToSelection}
+              removeFromSelection={removeFromSelection}
+              isSelected={isSelected}
+              shouldHighlight={shouldHighlight}
+              key={id}
+            />
+          );
+        })}
+      </CardsContainer>
+      <PlayHistory lastCards={lastPlayed} />
+    </Container>
   );
 };
 
