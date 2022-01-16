@@ -245,6 +245,7 @@ const PlayArea: React.FC<{
     setVisibleCards(newCards.slice(0, minimumCards));
     setCurrentSelection([]);
     setHightlightedCards([]);
+    setLastPlayed([]);
     setMessage("");
     setIsGameOver(false);
     availableCombinationsRef.current = [];
