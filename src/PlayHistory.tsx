@@ -41,7 +41,7 @@ const EmptyCard = styled(StyledCard)`
     border: 2px dotted #444;
   }
 
-  svg {
+  > * {
     opacity: 0;
   }
 `;
@@ -49,7 +49,6 @@ const EmptyCard = styled(StyledCard)`
 const Container = styled.div`
   padding: 16px;
   box-sizing: border-box;
-  text-align: center;
 
   @media screen and (min-width: 1100px), screen and (max-height: 650px) {
     position: absolute;
@@ -63,7 +62,10 @@ const Container = styled.div`
   :hover ${StyledCard} {
     animation: none;
   }
+`;
 
+const Title = styled.div`
+  text-align: center;
   color: #999;
 `;
 
@@ -72,7 +74,7 @@ const PlayHistory: React.FC<{ lastCards: CardAttributes[] }> = ({
 }) => {
   return (
     <Container>
-      Last match:
+      <Title>Last match:</Title>
       {lastCards.length > 0 ? (
         lastCards.map(({ ...cardAttributes }) => {
           const id = createIdFromCardAttributes(cardAttributes);
