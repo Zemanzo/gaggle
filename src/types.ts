@@ -45,3 +45,27 @@ export type SetConfigOption = <T extends keyof ConfigurationOptions>(
   key: T,
   newValue: ConfigurationOptions[T]
 ) => void;
+
+export interface Statistics {
+  timesPlayed: number;
+  timesFinished: number;
+  timesPerfectGames: number;
+  hintsUsed: number;
+  revealsUsed: number;
+  matchesFound: number;
+  attributes: {
+    [key in keyof CardAttributes]: AttributeStatistics;
+  };
+  fastestCompletionTime: number;
+  averageCompletionTime: number;
+}
+
+interface AttributeStatistics {
+  equal: number;
+  different: number;
+}
+
+export interface StatisticsReducerAction {
+  type: string;
+  args?: any;
+}

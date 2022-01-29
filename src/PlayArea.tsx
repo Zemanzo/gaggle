@@ -116,7 +116,7 @@ const PlayArea: React.FC<{
   setMenuEvent: (newMenuEvent: MenuEvents | null) => void;
   setCardCount: (cardCount: number) => void;
 }> = ({ setMessage, menuEvent, setMenuEvent, setCardCount }) => {
-  const { config } = usePageContext();
+  const { config, updateStatistics } = usePageContext();
   const minimumCards = config?.minimumCards || 12;
   const initialCards = useMemo(
     () => randomizeArray(generateAllCombinations()),
@@ -155,6 +155,7 @@ const PlayArea: React.FC<{
           overwriteExisting(selection);
         }
         setLastPlayed(selection);
+        updateStatistics({ type: "matchesFound", args: selection });
       }
     } else {
       setCurrentSelection(selection);
@@ -304,8 +305,17 @@ const PlayArea: React.FC<{
   }, [availableCombinationsRef.current, visibleCards, availableCards.length]);
 
   useEffect(() => {
+    if (isGameOver) {
+      updateStatistics({ type: "timesFinished" });
+      if (visibleCards.length === 0) {
+        updateStatistics({ type: "timesPerfectGames" });
+      }
+    }
+  }, [isGameOver]);
+
+  useEffect(() => {
     const onKeyPress: EventHandler<any> = (ev: KeyboardEvent) => {
-      if (ev.key === "End") {
+      if (ev.key === "k") {
         if (availableCombinationsRef.current.length > 0) {
           const combo = availableCombinationsRef.current[0];
           if (combo) {
@@ -333,12 +343,15 @@ const PlayArea: React.FC<{
           showMore();
           break;
         case MenuEvents.HINT:
+          updateStatistics({ type: "hintsUsed" });
           highlightSingle();
           break;
         case MenuEvents.REVEAL:
+          updateStatistics({ type: "revealsUsed" });
           highlightAll();
           break;
         case MenuEvents.RESET:
+          updateStatistics({ type: "timesPlayed" });
           reset();
           break;
       }

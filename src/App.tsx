@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import { useLocalStorage } from "react-use";
 import { PageContext } from "./PageContext";
@@ -7,6 +7,10 @@ import PlayArea from "./PlayArea";
 import SvgGlobals from "./SvgGlobals";
 import { ConfigurationOptions, MenuEvents, SetConfigOption } from "./types";
 import { defaultConfiguration } from "./ConfigModal";
+import {
+  statisticsReducer,
+  initialStatisticsReducerState,
+} from "./statisticsReducer";
 
 const FullScreenModal = styled.div<{ visible: boolean }>`
   position: absolute;
@@ -39,10 +43,18 @@ function App() {
       [key]: newValue,
     });
   };
+  const [statistics, updateStatistics] = useReducer(
+    statisticsReducer,
+    initialStatisticsReducerState
+  );
 
   const onMenuEvent = (menuEvent: MenuEvents) => {
     setMenuEvent(menuEvent);
   };
+
+  useEffect(() => {
+    updateStatistics({ type: "timesPlayed" });
+  }, []);
 
   return (
     <PageContext.Provider
@@ -52,6 +64,8 @@ function App() {
         fullScreenModalRef,
         config,
         setConfigOption,
+        statistics,
+        updateStatistics,
       }}
     >
       <SvgGlobals />

@@ -4,9 +4,10 @@ import styled, { css, keyframes } from "styled-components";
 import { MenuEvents } from "./types";
 import HamburgerMenu from "./icons/HamburgerMenu";
 import { usePageContext } from "./PageContext";
-import AboutModal from "./AboutModal";
+import StatisticsModal from "./StatisticsModal";
 import ConfigModal from "./ConfigModal";
 import ExplanationModal from "./ExplanationModal";
+import AboutModal from "./AboutModal";
 
 const EntryFadeIn = keyframes`
 	0% {
@@ -153,38 +154,44 @@ const Header: React.FC<{
   cardCount: number;
 }> = ({ message, setMessage, onMenuEvent, cardCount }) => {
   const [isDropDownMenuVisible, setIsDropDownMenuVisible] = useState(false);
+  const [isStatisticsModalVisible, setIsStatisticsModalVisible] =
+    useState(false);
   const [isConfigModalVisible, setIsConfigModalVisible] = useState(false);
   const [isExplanationModalVisible, setIsExplanationModalVisible] =
     useState(false);
   const [isAboutModalVisible, setIsAboutModalVisible] = useState(false);
-  const pageContext = usePageContext();
+  const {
+    isShowingFullScreenModal,
+    setIsShowingFullScreenModal,
+    fullScreenModalRef,
+  } = usePageContext();
 
   const toggleDropDownMenu = () => {
     setIsDropDownMenuVisible(!isDropDownMenuVisible);
   };
 
+  const toggleStatistics = () => {
+    setIsStatisticsModalVisible(!isStatisticsModalVisible);
+    setIsDropDownMenuVisible(false);
+    setIsShowingFullScreenModal(!isShowingFullScreenModal);
+  };
+
   const toggleConfig = () => {
     setIsConfigModalVisible(!isConfigModalVisible);
     setIsDropDownMenuVisible(false);
-    pageContext.setIsShowingFullScreenModal(
-      !pageContext.isShowingFullScreenModal
-    );
+    setIsShowingFullScreenModal(!isShowingFullScreenModal);
   };
 
   const toggleExplanation = () => {
     setIsExplanationModalVisible(!isExplanationModalVisible);
     setIsDropDownMenuVisible(false);
-    pageContext.setIsShowingFullScreenModal(
-      !pageContext.isShowingFullScreenModal
-    );
+    setIsShowingFullScreenModal(!isShowingFullScreenModal);
   };
 
   const toggleAbout = () => {
     setIsAboutModalVisible(!isAboutModalVisible);
     setIsDropDownMenuVisible(false);
-    pageContext.setIsShowingFullScreenModal(
-      !pageContext.isShowingFullScreenModal
-    );
+    setIsShowingFullScreenModal(!isShowingFullScreenModal);
   };
 
   return (
@@ -232,38 +239,44 @@ const Header: React.FC<{
             New game
           </DropDownButton>
 
-          {/* <DropDownButton delay={0.1} onClick={() => {}}>
+          <DropDownButton delay={0.1} onClick={toggleStatistics}>
             View statistics
-          </DropDownButton> */}
+          </DropDownButton>
+          {fullScreenModalRef.current &&
+            isStatisticsModalVisible &&
+            ReactDOM.createPortal(
+              <StatisticsModal close={toggleStatistics} />,
+              fullScreenModalRef.current
+            )}
 
-          <DropDownButton delay={0.1} onClick={toggleConfig}>
+          <DropDownButton delay={0.2} onClick={toggleConfig}>
             Configuration
           </DropDownButton>
-          {pageContext.fullScreenModalRef.current &&
+          {fullScreenModalRef.current &&
             isConfigModalVisible &&
             ReactDOM.createPortal(
               <ConfigModal close={toggleConfig} />,
-              pageContext.fullScreenModalRef.current
+              fullScreenModalRef.current
             )}
 
-          <DropDownButton delay={0.2} onClick={toggleExplanation}>
+          <DropDownButton delay={0.3} onClick={toggleExplanation}>
             How to play
           </DropDownButton>
-          {pageContext.fullScreenModalRef.current &&
+          {fullScreenModalRef.current &&
             isExplanationModalVisible &&
             ReactDOM.createPortal(
               <ExplanationModal close={toggleExplanation} />,
-              pageContext.fullScreenModalRef.current
+              fullScreenModalRef.current
             )}
 
-          <DropDownButton delay={0.3} onClick={toggleAbout}>
+          <DropDownButton delay={0.4} onClick={toggleAbout}>
             About
           </DropDownButton>
-          {pageContext.fullScreenModalRef.current &&
+          {fullScreenModalRef.current &&
             isAboutModalVisible &&
             ReactDOM.createPortal(
               <AboutModal close={toggleAbout} />,
-              pageContext.fullScreenModalRef.current
+              fullScreenModalRef.current
             )}
         </DropDownMenu>
       </DropDownMenuContainer>

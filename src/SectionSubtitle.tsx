@@ -26,7 +26,7 @@ const Container = styled.div`
   }
 `;
 
-const ConfigSubtitle: React.FC<{}> = ({ children }) => {
+const SectionSubtitle: React.FC<{}> = ({ children }) => {
   return (
     <Container>
       <hr />
@@ -36,4 +36,4 @@ const ConfigSubtitle: React.FC<{}> = ({ children }) => {
   );
 };
 
-export default ConfigSubtitle;
+export default SectionSubtitle;

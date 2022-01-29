@@ -4,7 +4,7 @@ import { default as LargeRect } from "./icons/Rect";
 import { default as LargeDiamond } from "./icons/Diamond";
 import { default as LargeTilde } from "./icons/Tilde";
 import Modal, { CloseButton, Title } from "./Modal";
-import ConfigSubtitle from "./ConfigSubtitle";
+import SectionSubtitle from "./SectionSubtitle";
 import { Color, FillStyle } from "./types";
 
 const StyledModal = styled(Modal)`
@@ -63,7 +63,7 @@ const ExplanationModal: React.FC<{ close: () => void }> = ({ close }) => {
         The goal of this game is to match three cards. However, matching is
         limited based on the card's attributes.
       </p>
-      <ConfigSubtitle>Attributes</ConfigSubtitle>
+      <SectionSubtitle>Attributes</SectionSubtitle>
       <p>A card has FOUR attributes, represented by the icons on the card:</p>
       <AttributeParagraphs>
         <AttributeParagraph>
@@ -108,7 +108,7 @@ const ExplanationModal: React.FC<{ close: () => void }> = ({ close }) => {
           </div>
         </AttributeParagraph>
       </AttributeParagraphs>
-      <ConfigSubtitle>Matching</ConfigSubtitle>
+      <SectionSubtitle>Matching</SectionSubtitle>
       <p>
         To be able to match three cards, either of the following rules should
         apply for each individual attribute:
@@ -126,7 +126,7 @@ const ExplanationModal: React.FC<{ close: () => void }> = ({ close }) => {
         When you have two (but not three) of the same attribute, it is not a
         valid match.
       </p>
-      <ConfigSubtitle>Cards</ConfigSubtitle>
+      <SectionSubtitle>Cards</SectionSubtitle>
       <p>
         It is possible that no valid matches are available in the set of cards
         on your screen. In this case, you can add more cards by pressing the

@@ -1,5 +1,10 @@
 import { createContext, useContext } from "react";
-import { ConfigurationOptions, SetConfigOption } from "./types";
+import {
+  ConfigurationOptions,
+  SetConfigOption,
+  Statistics,
+  StatisticsReducerAction,
+} from "./types";
 
 export interface PageContextType {
   isShowingFullScreenModal: boolean;
@@ -7,6 +12,8 @@ export interface PageContextType {
   fullScreenModalRef: React.MutableRefObject<HTMLDivElement | null>;
   config: ConfigurationOptions | undefined;
   setConfigOption: SetConfigOption;
+  statistics: Statistics;
+  updateStatistics: (action: StatisticsReducerAction) => void;
 }
 
 export const PageContext = createContext<PageContextType>(
