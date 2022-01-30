@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Modal, { CloseButton, Title } from "./Modal";
 import { usePageContext } from "./PageContext";
 import SectionSubtitle from "./SectionSubtitle";
+import { MenuEvents } from "./types";
 
 const StyledModal = styled(Modal)`
   p {
@@ -76,9 +77,22 @@ const AttributeStatsEmpty = styled.div`
   background-color: transparent;
 `;
 
+const DangerButton = styled.button`
+  color: #f55;
+  border-color: #f55;
+  padding: 8px 16px;
+`;
+
 const DECIMAL_AMOUNT = 1;
 const StatisticsModal: React.FC<{ close: () => void }> = ({ close }) => {
-  const { statistics } = usePageContext();
+  const { statistics, updateStatistics, setMenuEvent } = usePageContext();
+
+  const reset = () => {
+    if (window.confirm("Are you sure you wish to reset all your statistics?")) {
+      updateStatistics({ type: "reset" });
+      setMenuEvent(MenuEvents.RESET);
+    }
+  };
 
   return (
     <StyledModal>
@@ -220,6 +234,10 @@ const StatisticsModal: React.FC<{ close: () => void }> = ({ close }) => {
           </AttributeStatsValue>
         </AttributeStatsContainer>
       </div>
+      <SectionSubtitle>Options</SectionSubtitle>
+      <p>
+        <DangerButton onClick={reset}>Reset statistics</DangerButton>
+      </p>
     </StyledModal>
   );
 };

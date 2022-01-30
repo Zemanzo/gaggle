@@ -134,9 +134,14 @@ const PlayArea: React.FC<{
   );
   const [lastPlayed, setLastPlayed] = useState([] as CardAttributes[]);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [hasMadeFirstSelection, setHasMadeFirstSelection] = useState(false);
   const availableCombinationsRef = useRef<CardType[][]>([]);
 
   const addToSelection = (cards: CardAttributes | CardAttributes[]) => {
+    if (!hasMadeFirstSelection) {
+      setHasMadeFirstSelection(true);
+      updateStatistics({ type: "timesPlayed" });
+    }
     setMessage("");
     const selection = Array.isArray(cards)
       ? cards
@@ -249,6 +254,7 @@ const PlayArea: React.FC<{
     setLastPlayed([]);
     setMessage("");
     setIsGameOver(false);
+    setHasMadeFirstSelection(false);
     availableCombinationsRef.current = [];
   };
 
@@ -315,7 +321,7 @@ const PlayArea: React.FC<{
 
   useEffect(() => {
     const onKeyPress: EventHandler<any> = (ev: KeyboardEvent) => {
-      if (ev.key === "k") {
+      if (ev.key === "End") {
         if (availableCombinationsRef.current.length > 0) {
           const combo = availableCombinationsRef.current[0];
           if (combo) {
@@ -351,7 +357,6 @@ const PlayArea: React.FC<{
           highlightAll();
           break;
         case MenuEvents.RESET:
-          updateStatistics({ type: "timesPlayed" });
           reset();
           break;
       }

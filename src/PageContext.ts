@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 import {
   ConfigurationOptions,
+  MenuEvents,
   SetConfigOption,
   Statistics,
   StatisticsReducerAction,
@@ -14,6 +15,7 @@ export interface PageContextType {
   setConfigOption: SetConfigOption;
   statistics: Statistics;
   updateStatistics: (action: StatisticsReducerAction) => void;
+  setMenuEvent: (action: MenuEvents) => void;
 }
 
 export const PageContext = createContext<PageContextType>(

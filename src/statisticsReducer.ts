@@ -1,6 +1,7 @@
 import { CardAttributes, Statistics, StatisticsReducerAction } from "./types";
+import { deepCloneObject } from "./utils";
 
-export const initialStatisticsReducerState: Statistics = {
+const initialStatisticsReducerState: Statistics = {
   timesPlayed: 0,
   timesFinished: 0,
   timesPerfectGames: 0,
@@ -37,6 +38,7 @@ export function statisticsReducer(
   switch (action.type) {
     case "timesPlayed":
     case "timesFinished":
+    case "timesPerfectGames":
     case "hintsUsed":
     case "revealsUsed":
       newState = { ...state, [action.type]: state[action.type] + 1 };
@@ -52,11 +54,26 @@ export function statisticsReducer(
         attributes: newAttributes,
       };
       break;
+    case "reset":
+      newState = deepCloneObject(initialStatisticsReducerState);
+      break;
     default:
       throw new Error(`No action found with type ${action.type}`);
   }
-  // TODO: write to localstorage
+  asyncWriteStatsToStorage(newState);
   return newState;
+}
+
+export function getInitialStatisticsReducerState(): Statistics {
+  const storedStatistics = window.localStorage.getItem("statistics");
+  if (storedStatistics) {
+    return JSON.parse(storedStatistics);
+  }
+  return deepCloneObject(initialStatisticsReducerState);
+}
+
+async function asyncWriteStatsToStorage(newValue: Statistics) {
+  window.localStorage.setItem("statistics", JSON.stringify(newValue));
 }
 
 function getIncrementsBySelection(
