@@ -233,14 +233,17 @@ const PlayArea: React.FC<{
     const combinations = checkCombinations();
     if (combinations.length === 0) {
       if (availableCards.length === 0) {
+        updateStatistics({ type: "invalidMoreCardsRequest" });
         setMessage("No more cards left!");
       } else {
+        updateStatistics({ type: "validMoreCardsRequest" });
         setMessage("");
         const newCards = availableCards.slice(0, ADD_CARDS_AMOUNT);
         setAvailableCards(availableCards.slice(ADD_CARDS_AMOUNT));
         setVisibleCards([...visibleCards, ...newCards]);
       }
     } else {
+      updateStatistics({ type: "invalidMoreCardsRequest" });
       setMessage("There's more to be found!");
     }
   };

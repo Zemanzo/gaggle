@@ -53,6 +53,8 @@ export interface Statistics {
   hintsUsed: number;
   revealsUsed: number;
   matchesFound: number;
+  validMoreCardsRequest: number;
+  invalidMoreCardsRequest: number;
   attributes: {
     [key in keyof CardAttributes]: AttributeStatistics;
   };

@@ -94,6 +94,9 @@ const StatisticsModal: React.FC<{ close: () => void }> = ({ close }) => {
     }
   };
 
+  const totalMoreCardsRequested =
+    statistics.validMoreCardsRequest + statistics.invalidMoreCardsRequest;
+
   return (
     <StyledModal>
       <Title>STATISTICS</Title>
@@ -113,6 +116,23 @@ const StatisticsModal: React.FC<{ close: () => void }> = ({ close }) => {
             Times finished with no cards remaining
           </StatisticsLabel>
           <StatisticsValue>{statistics.timesPerfectGames}</StatisticsValue>
+        </StatisticsRow>
+        <StatisticsRow>
+          <StatisticsLabel>Times more cards requested</StatisticsLabel>
+          <StatisticsValue>{totalMoreCardsRequested}</StatisticsValue>
+        </StatisticsRow>
+        <StatisticsRow>
+          <StatisticsLabel>
+            Times more cards requested with matches left to be found
+          </StatisticsLabel>
+          <StatisticsValue>
+            {statistics.invalidMoreCardsRequest} (
+            {(
+              (statistics.invalidMoreCardsRequest / totalMoreCardsRequested) *
+              100
+            ).toFixed(DECIMAL_AMOUNT)}
+            %)
+          </StatisticsValue>
         </StatisticsRow>
         <StatisticsRow>
           <StatisticsLabel>Hints used</StatisticsLabel>

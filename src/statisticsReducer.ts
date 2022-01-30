@@ -8,6 +8,8 @@ const initialStatisticsReducerState: Statistics = {
   hintsUsed: 0,
   revealsUsed: 0,
   matchesFound: 0,
+  validMoreCardsRequest: 0,
+  invalidMoreCardsRequest: 0,
   attributes: {
     color: {
       equal: 0,
@@ -41,6 +43,8 @@ export function statisticsReducer(
     case "timesPerfectGames":
     case "hintsUsed":
     case "revealsUsed":
+    case "validMoreCardsRequest":
+    case "invalidMoreCardsRequest":
       newState = { ...state, [action.type]: state[action.type] + 1 };
       break;
     case "matchesFound":
@@ -67,7 +71,16 @@ export function statisticsReducer(
 export function getInitialStatisticsReducerState(): Statistics {
   const storedStatistics = window.localStorage.getItem("statistics");
   if (storedStatistics) {
-    return JSON.parse(storedStatistics);
+    const parsedStoredStatistics = JSON.parse(storedStatistics);
+
+    // Add potentially missing keys.
+    for (let key in initialStatisticsReducerState) {
+      parsedStoredStatistics[key] = deepCloneObject(
+        initialStatisticsReducerState
+      )[key];
+    }
+
+    return parsedStoredStatistics;
   }
   return deepCloneObject(initialStatisticsReducerState);
 }
