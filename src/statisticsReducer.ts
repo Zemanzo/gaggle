@@ -74,10 +74,11 @@ export function getInitialStatisticsReducerState(): Statistics {
     const parsedStoredStatistics = JSON.parse(storedStatistics);
 
     // Add potentially missing keys.
-    for (let key in initialStatisticsReducerState) {
-      parsedStoredStatistics[key] = deepCloneObject(
-        initialStatisticsReducerState
-      )[key];
+    const clonedObject = deepCloneObject(initialStatisticsReducerState);
+    for (let key in clonedObject) {
+      if (!parsedStoredStatistics[key]) {
+        parsedStoredStatistics[key] = clonedObject[key];
+      }
     }
 
     return parsedStoredStatistics;
