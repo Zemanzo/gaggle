@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import styled, { css } from "styled-components";
 import Modal, { CloseButton, Title } from "./Modal";
 import { usePageContext } from "./PageContext";
 import SectionSubtitle from "./SectionSubtitle";
@@ -82,9 +82,38 @@ const DangerButton = styled.button`
   border-color: #f55;
   padding: 8px 16px;
 `;
+const PeriodButton = styled.button<{ isSelected: boolean }>`
+  padding: 8px 16px;
+  width: 50%;
+  margin: 0 16px;
+  transition: color 0.15s, background-color 0.15s;
+
+  ${({ isSelected }) =>
+    isSelected &&
+    css`
+      background-color: #eee;
+      color: #111;
+      cursor: default;
+
+      :hover {
+        background-color: #eee;
+        color: #111;
+      }
+    `}
+`;
+const PeriodContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+enum Period {
+  ALL_TIME,
+  SESSION,
+}
 
 const DECIMAL_AMOUNT = 1;
 const StatisticsModal: React.FC<{ close: () => void }> = ({ close }) => {
+  const [period, setPeriod] = useState(Period.ALL_TIME);
   const { statistics, updateStatistics, setMenuEvent } = usePageContext();
 
   const reset = () => {
@@ -101,6 +130,25 @@ const StatisticsModal: React.FC<{ close: () => void }> = ({ close }) => {
     <StyledModal>
       <Title>STATISTICS</Title>
       <CloseButton onClick={close} />
+      <SectionSubtitle>Period</SectionSubtitle>
+      <p>
+        Session statistics are accumulated for as long as you do not navigate
+        away from this page.
+      </p>
+      <PeriodContainer>
+        <PeriodButton
+          isSelected={period === Period.ALL_TIME}
+          onClick={() => setPeriod(Period.ALL_TIME)}
+        >
+          All time
+        </PeriodButton>
+        <PeriodButton
+          isSelected={period === Period.SESSION}
+          onClick={() => setPeriod(Period.SESSION)}
+        >
+          Session
+        </PeriodButton>
+      </PeriodContainer>
       <SectionSubtitle>General</SectionSubtitle>
       <div>
         <StatisticsRow>
